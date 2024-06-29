@@ -41,7 +41,7 @@ alias: <EnclosureName> - Ensure Heat/Light State on HA Boot
 #description: Use the helper field to turn the Day Light Bulb *ON* at the scheduled time.
 
 trigger:
-   - platform: homeassistant
+  - platform: homeassistant
     event: start
 condition: []
 action:
@@ -60,7 +60,7 @@ action:
               entity_id: '{{ expand(lights_selection) | selectattr("entity_id", "!=", trigger.entity_id) | map(attribute="entity_id") | list }}'
       - conditions: # NIGHT TIME
           - condition: time
-		    after: !input night_time_start
+            after: !input night_time_start
             before: !input day_time_start
         sequence:
           - service: climate.set_preset_mode

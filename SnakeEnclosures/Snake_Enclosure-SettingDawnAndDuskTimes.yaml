@@ -1,5 +1,5 @@
 blueprint:
-  name: Snake Enclosure - Set Day and Night Times16
+  name: Snake Enclosure - Set Day and Night Times
   description: Automation for setting the Day and Night times to helpers.
   domain: automation
   input:

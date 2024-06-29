@@ -59,7 +59,7 @@ action:
             data:
               preset_mode: eco
             entity_id: !input thermostat_selection
-    default: 
+    default:
       sequence:
         - service: climate.set_preset_mode
           data:
