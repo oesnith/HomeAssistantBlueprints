@@ -1,0 +1,51 @@
+blueprint:
+  name: <ENCLOSURENAME> - Day Light Bulb - Scheduled On
+  description: Automation for setting up the Day Time On time for the light bulbs.
+  domain: automation
+  input:
+    day_time_start:
+      name: Day Time Start Time
+      selector:
+        entity:
+          filter:
+            - domain: datetime
+  
+    lights_selection:
+      name: Enclosure Lights
+      selector:
+        entity:
+          domain: 
+            - switch
+            - light
+          multiple: true  
+
+variables:
+  day_time_start: !input 'day_time_start'
+  lights_selection: !input 'lights_selection'
+  
+
+alias: Spike - Day Light Bulb - Scheduled On
+description: Use the helper field to turn the Day Light Bulb *ON* at the scheduled time.
+
+
+trigger:
+  - platform: time
+    #at: input_datetime.spike_day_time_start
+    at: !input day_time_start
+condition: []
+
+action:
+#  - type: turn_on
+#    device_id: 8042cb6da63462790779fbfe2b11b1a2
+#    entity_id: d8bd0d0137f237338c070d2ef9852b8c
+#    domain: switch
+#  - type: turn_on
+#    device_id: 145803706005720986eb1309cb5f2f9e
+#    entity_id: 8d36ed11e52066f4d19d3a9dd9e2fad9
+#    domain: switch
+  - service:  homeassistant.turn_on
+    target:
+      entity_id: '{{ expand(lights_selection) | selectattr("entity_id", "!=", trigger.entity_id) | map(attribute="entity_id") | list }}'
+  
+
+mode: single
