@@ -1,0 +1,178 @@
+blueprint:
+  name: Snake Enclosure - Set Day and Night Times16
+  description: Automation for setting the Day and Night times to helpers.
+  domain: automation
+  input:
+    sun_sensor_dawn:
+      name: Sun sensor day start sensor
+      description: Sun2 Integration. Order of sun events - dawn, rising, setting, dusk
+      selector:
+        entity:
+          filter:
+            - domain: sensor
+
+    sun_sensor_dusk:
+      name: Sun sensor night start sensor
+      description: Sun2 Integration. Order of sun events - dawn, rising, setting, dusk
+      selector:
+        entity:
+          filter:
+            - domain: sensor
+
+    natural_enabled:
+      name: Input Boolean Indicating if Natural Day Cycles are enabled.
+      selector:
+        entity:
+          domain:
+            - input_boolean
+
+    target_day_start:
+      name: Target Day Start Helper
+      selector:
+        entity:
+          domain:
+            - input_datetime
+    target_night_start:
+      name: Target Night Start Helper
+      selector:
+        entity:
+          domain:
+            - input_datetime
+
+    target_day_start_tomorrow:
+      name: Target Day Start Helper - Tomorrow
+      selector:
+        entity:
+          domain:
+            - input_datetime
+    target_night_start_tomorrow:
+      name: Target Night Start Helper - Tomorrow
+      selector:
+        entity:
+          domain:
+            - input_datetime
+
+#    enclosure_name:
+#      name: Enclosure Name
+
+#    light_type_name:
+#      name: Type of the lights (UV, Heat, Grow, etc)
+
+variables:
+  sun_sensor_dawn: !input "sun_sensor_dawn"
+  sun_sensor_dusk: !input "sun_sensor_dusk"
+  natural_enabled: !input "natural_enabled"
+  target_day_start: !input "target_day_start"
+  target_night_start: !input "target_night_start"
+  target_day_start_tomorrow: !input "target_day_start_tomorrow"
+  target_night_start_tomorrow: !input "target_night_start_tomorrow"
+
+alias: <EnclosureName> - Set Day and Night Times
+description: Set the new times for day and night
+
+trigger:
+  - platform: state
+    entity_id:
+      - !input sun_sensor_dawn
+    attribute: today
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 30
+    id: dayset
+
+  - platform: state
+    entity_id:
+      - !input sun_sensor_dusk
+    attribute: today
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 30
+    id: nightset
+
+condition: []
+
+action:
+  - choose:
+      - conditions: >
+          {{ trigger.entity_id == sun_sensor_dawn and 
+          is_state(natural_enabled, 'on') }}
+        sequence:
+          - service: input_datetime.set_datetime
+            data:
+              time: >-
+                {{ state_attr(sun_sensor_dawn,
+                'today').strftime('%H:%M:%S') }}
+            target:
+              entity_id: input_datetime.target_day_start
+          - service: input_datetime.set_datetime
+            data:
+              time: >-
+                {{ state_attr(sun_sensor_dawn,
+                'tomorrow').strftime('%H:%M:%S') }}
+            target:
+              entity_id: input_datetime.target_day_start_tomorrow
+
+      - conditions: >
+          {{ trigger.entity_id == sun_sensor_dusk and 
+          is_state(natural_enabled, 'on') }}
+        sequence:
+          - service: input_datetime.set_datetime
+            data:
+              time: >-
+                {{ state_attr(sun_sensor_dusk,
+                'today').strftime('%H:%M:%S') }}
+            target:
+              entity_id: input_datetime.target_night_start
+          - service: input_datetime.set_datetime
+            data:
+              time: >-
+                {{ state_attr(sun_sensor_dusk,
+                'tomorrow').strftime('%H:%M:%S') }}
+            target:
+              entity_id: input_datetime.target_night_start_tomorrow
+
+    default:
+      sequence:
+        - service: input_datetime.set_datetime
+          data:
+            time: >-
+              {{ state_attr(sun_sensor_dawn,
+              'today').strftime('%H:%M:%S') }}
+          target:
+            #entity_id: input_datetime.target_day_start
+
+            entity_id: !input target_day_start
+
+        - service: input_datetime.set_datetime
+          data:
+            time: >-
+              {{ state_attr(sun_sensor_dawn,
+              'tomorrow').strftime('%H:%M:%S') }}
+          target:
+            #entity_id: input_datetime.target_day_start_tomorrow
+            entity_id: !input target_day_start_tomorrow
+        - service: input_datetime.set_datetime
+          data:
+            time: >-
+              {{ state_attr(sun_sensor_dusk,
+              'today').strftime('%H:%M:%S') }}
+          target:
+            #entity_id: input_datetime.target_night_start
+            entity_id: !input target_night_start
+        - service: input_datetime.set_datetime
+          data:
+            time: >-
+              {{ state_attr(sun_sensor_dusk,
+              'tomorrow').strftime('%H:%M:%S') }}
+          target:
+            #entity_id: input_datetime.target_night_start_tomorrow
+            entity_id: !input target_night_start_tomorrow
+        - service: input_text.set_value
+          target:
+            entity_id: input_text.debug
+          data:
+            value: !input target_night_start_tomorrow
+
+mode: single
