@@ -28,6 +28,7 @@ blueprint:
         entity:
           domain:
             - switch
+            - input_boolean
             #- light
           multiple: true
 
