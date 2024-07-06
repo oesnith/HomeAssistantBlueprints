@@ -55,6 +55,7 @@ action:
           - service: climate.set_preset_mode
             data:
               preset_mode: comfort
+              hvac_mode: heat
             entity_id: !input thermostat_selection
           - service: homeassistant.turn_on
             target:
@@ -67,6 +68,7 @@ action:
           - service: climate.set_preset_mode
             data:
               preset_mode: eco
+              hvac_mode: heat
             entity_id: !input thermostat_selection
           - service: homeassistant.turn_off
             target:
