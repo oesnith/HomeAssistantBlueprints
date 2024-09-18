@@ -105,15 +105,16 @@ action:
                 {{ state_attr(sun_sensor_dawn,
                 'today').strftime('%H:%M:%S') }}
             target:
-              entity_id: input_datetime.target_day_start
+              #entity_id: input_datetime.target_day_start
+              entity_id: !input target_day_start
           - service: input_datetime.set_datetime
             data:
               time: >-
                 {{ state_attr(sun_sensor_dawn,
                 'tomorrow').strftime('%H:%M:%S') }}
             target:
-              entity_id: input_datetime.target_day_start_tomorrow
-
+              #entity_id: input_datetime.target_day_start_tomorrow
+              entity_id: @input target_day_start_tomorrow
       - conditions: >
           {{ trigger.entity_id == sun_sensor_dusk and 
           is_state(natural_enabled, 'on') }}
@@ -124,14 +125,16 @@ action:
                 {{ state_attr(sun_sensor_dusk,
                 'today').strftime('%H:%M:%S') }}
             target:
-              entity_id: input_datetime.target_night_start
+              #entity_id: input_datetime.target_night_start
+              entity_id: target_night_start
           - service: input_datetime.set_datetime
             data:
               time: >-
                 {{ state_attr(sun_sensor_dusk,
                 'tomorrow').strftime('%H:%M:%S') }}
             target:
-              entity_id: input_datetime.target_night_start_tomorrow
+              #entity_id: input_datetime.target_night_start_tomorrow
+              entity_id: target_night_start_tomorrow
 
     default:
       sequence:
