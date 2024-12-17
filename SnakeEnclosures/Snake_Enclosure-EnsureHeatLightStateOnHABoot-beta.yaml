@@ -79,7 +79,7 @@ actions:
                 sequence:
                   - service: climate.set_preset_mode
                     data:
-                      preset_mode: manual
+                      preset_mode: none
                     entity_id: !input thermostat_selection
                   - service: climate.set_hvac_mode
                     target:
@@ -144,7 +144,7 @@ actions:
                 sequence:
                   - service: climate.set_preset_mode
                     data:
-                      preset_mode: manual
+                      preset_mode: none
                     entity_id: !input thermostat_selection
                   - service: climate.set_hvac_mode
                     target:
