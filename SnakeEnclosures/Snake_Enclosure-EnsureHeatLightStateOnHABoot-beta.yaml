@@ -85,7 +85,7 @@ actions:
                     target:
                       entity_id: !input thermostat_selection
                     data:
-                      hvac_mode: off
+                      hvac_mode: "off"
 
               - conditions: #THERMOSTAT SHOULD BE ON HEAT
                   - condition: not
@@ -96,13 +96,13 @@ actions:
                 sequence:
                   - service: climate.set_preset_mode
                     data:
-                      preset_mode: comfort
+                      preset_mode: "comfort"
                     entity_id: !input thermostat_selection
                   - service: climate.set_hvac_mode
                     target:
                       entity_id: !input thermostat_selection
                     data:
-                      hvac_mode: heat
+                      hvac_mode: "heat"
 
           - choose: # LIGHT BYPASS CHECK
 #              - conditions: #LIGHT SHOULD BE UNMANAGED
@@ -144,13 +144,13 @@ actions:
                 sequence:
                   - service: climate.set_preset_mode
                     data:
-                      preset_mode: none
+                      preset_mode: "none"
                     entity_id: !input thermostat_selection
                   - service: climate.set_hvac_mode
                     target:
                       entity_id: !input thermostat_selection
                     data:
-                      hvac_mode: off
+                      hvac_mode: "off"
 
               - conditions: #THERMOSTAT SHOULD BE ON HEAT
                   - condition: not
@@ -161,13 +161,13 @@ actions:
                 sequence:
                   - service: climate.set_preset_mode
                     data:
-                      preset_mode: eco
+                      preset_mode: "eco"
                     entity_id: !input thermostat_selection
                   - service: climate.set_hvac_mode
                     target:
                       entity_id: !input thermostat_selection
                     data:
-                      hvac_mode: heat
+                      hvac_mode: "heat"
 
           - choose: # LIGHT BYPASS CHECK
 #              - conditions: #LIGHT SHOULD BE UNMANAGED
