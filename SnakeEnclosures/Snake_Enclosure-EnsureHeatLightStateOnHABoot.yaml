@@ -31,19 +31,12 @@ blueprint:
             - input_boolean
             #- light
           multiple: true
-    #thermostat_bypass:
-    #  name: Thermostat Bypass
-    #  selector:
-    #    entity:
-    #      domain:
-    #        - input_boolean
 
 variables:
   day_time_start: !input "day_time_start"
   night_time_start: !input "night_time_start"
   thermostat_selection: !input "thermostat_selection"
   lights_selection: !input "lights_selection"
-  #thermostat_bypass: !input "thermostat_bypass"
 
 alias: <EnclosureName> - Ensure Heat/Light State on HA Boot
 #description: Use the helper field to turn the Day Light Bulb *ON* at the scheduled time.
@@ -55,14 +48,9 @@ condition: []
 action:
   - choose:
       - conditions: #DAY TIME
-        #- condition: and
-        #- conditions:
           - condition: time
             after: !input day_time_start
             before: !input night_time_start
-        #  - condition: state
-        #    entity_id: !input thermostat_bypass
-        #    state: "on"
         sequence:
           - service: climate.set_preset_mode
             data:
@@ -77,19 +65,14 @@ action:
             target:
               entity_id: '{{ expand(lights_selection) | selectattr("entity_id", "!=", trigger.entity_id) | map(attribute="entity_id") | list }}'
       - conditions: # NIGHT TIME
-        #- condition: and
-        #  conditions:
           - condition: time
             after: !input night_time_start
             before: !input day_time_start
-        #  - condition: state
-        #    entity_id: !input thermostat_bypass
-        #    state: "on"
         sequence:
           - service: climate.set_preset_mode
             data:
               preset_mode: eco
-            entity_id: !input thermostat_selection        
+            entity_id: !input thermostat_selection
           - service: climate.set_hvac_mode
             target:
               entity_id: !input thermostat_selection
