@@ -29,7 +29,7 @@ blueprint:
           domain:
             - switch
             - input_boolean
-            #- light
+            - light
           multiple: true
     thermostat_bypass:
       name: Thermostat Bypass
