@@ -22,7 +22,7 @@ blueprint:
         entity:
           domain:
             - switch
-            #- light
+            - light
           multiple: true
 
 #    enclosure_name:
